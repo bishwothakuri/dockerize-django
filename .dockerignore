@@ -1,0 +1,10 @@
+.git
+.gitignore
+*.pyc
+__pycache__
+db.sqlite3
+env
+ENV
+*.vscode
+Dockerfile*
+docker-compose*
