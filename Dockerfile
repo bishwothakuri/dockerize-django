@@ -21,6 +21,9 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.t
 # Pull the official base image
 FROM python:3.8-slim
 
+# Install PostgreSQL client tools and ncat for network connectivity checks
+RUN apt-get update && apt-get install -y postgresql-client ncat
+
 # Create a directory for the app user
 RUN mkdir -p /home/app
 
@@ -37,6 +40,13 @@ COPY --from=builder /app/wheels /wheels
 # Install dependencies using wheels
 RUN pip install --upgrade pip && pip install --no-cache /wheels/*
 
+# copy entrypoint.sh
+COPY ./docker/entrypoint.sh .
+RUN sed -i 's/\r$//g'  entrypoint.sh
+
+# Grant execute permission to the entrypoint script
+RUN chmod +x entrypoint.sh
+
 # Copy the entire project
 COPY . /app/
 
@@ -46,5 +56,9 @@ RUN chown -R docker:docker /app/
 # Change to the app user
 USER docker
 
-# Specify the command to run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# run entrypoint
+ENTRYPOINT ["./entrypoint.sh"]
+CMD [ "run_devcolumn" ]
+
+EXPOSE 8000
+
