@@ -8,9 +8,7 @@ services:
             dockerfile: ./Dockerfile
         command: run_devcolumn
         volumes:
-            # - ./conf:/web_root/conf/
             - devcolumn-logs:/app/devcolumn/logs
-            - ./docker/entrypoint.sh:/app/devcolumn/entrypoint.sh
         ports:
             - 8000:8000
         env_file:
