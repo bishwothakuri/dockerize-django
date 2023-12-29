@@ -3,7 +3,6 @@ version: '3.8'
 services:
     devcolumn:
         container_name: devcolumn
-        image: devcolumn:1.0
         build:
             context: .
             dockerfile: ./Dockerfile
